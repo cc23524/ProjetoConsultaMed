@@ -1,0 +1,25 @@
+body {
+    background-image: url("/img/bg1.svg");      
+}
+
+
+.mt-2 {
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+
+
+.btn-primary {
+    background-color: #974684; 
+    color: #ffffff; 
+}
+
+.text-center {
+    color: #ffffff; 
+}
+
+.title{
+    color: #ffffff; 
+}

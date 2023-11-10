@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Editar médico</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    </head>
+
+    <body style="margin-top: 70px;">
+        <h1 style="text-align:center">Editar Médico</h1>
+        
+        <div class="container">
+            <form action="/updateM/<%= doctor.idM %>" method="POST">
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" class="form-control" id="nome" name="nome" value="<%= doctor.nome %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="sobrenome">Sobrenome:</label>
+                    <input type="text" class="form-control" id="sobrenome" name="sobrenome" value="<%= doctor.sobrenome %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="idType">idType:</label>
+                    <select class="form-control" id="idType" name="idType" required>
+                        <% types.forEach(function(type) { %>
+                            <option value="<%= type.idType %>"<% if(type.idType === doctor.idType) { %> selected <% } %>>
+                            <%= type.idType %> (<%= type.nome %>)
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Atualizar</button>
+                <a href="javascript:history.back();" class="btn btn-primary">Voltar</a>
+            </form>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+    </body>
+</html>

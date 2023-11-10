@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/register.css">
+    
+    <title>Registrar</title>
+</head>
+
+<body style="margin-top: -40px;">
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">Cadastro</h3>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form action="/addM" method="POST">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="nome">Nome:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="nome" name="nome" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="sobrenome">Sobrenome:</label>
+                            <input type="text" class="form-control" id="sobrenome" name="sobrenome" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="crm">CRM</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-registered"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="crm" name="crm" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="idType">Especialidade:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                </div>
+                                <select class="form-control" id="idType" name="idType" required>
+                                    <% types.forEach(function(type) { %>
+                                        <option value="<%= type.idType %>"<% if(type.idType) { %> selected <% } %>>
+                                        <%= type.idType %> (<%= type.nome %>)
+                                        </option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="email" name="email" required>
+                            <div id="email-message" class="error-message"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha">Senha:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input type="password" class="form-control" id="senha" name="senha" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha-confirm">Confirme a Senha:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input type="password" class="form-control" id="senha-confirm" name="senha-confirm" required>
+                        </div>
+                        <p id="senha-message"></p>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                    </div>
+                </form>
+                <div class="text-center mt-2" style="display: flex; justify-content:space-between">
+                    <a href="/">Already have an account? Sign in</a>
+                    <a href="javascript:history.back();" class="btn btn-primary">Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('email').addEventListener('input', checkemailExists);
+
+                async function checkemailExists() {
+                    let email = document.getElementById('email').value;
+                    const emailMessageElement = document.getElementById('email-message');
+                
+                    if (!email) {
+                        emailMessageElement.textContent = '';
+                        emailMessageElement.style.color = 'initial';
+                        return;
+                    }
+                
+                    let response = await fetch(`/checkemail?email=${email}`);
+                    let data = await response.json();
+                
+                    emailMessageElement.textContent = data.message;
+                    emailMessageElement.style.color = data.message === "E-mail disponível!" ? 'green' : 'red';
+                }
+            document.getElementById('crm').addEventListener('input', function (e) {
+                this.value = this.value.replace(/\D/g, '');
+                
+                if (this.value.length > 5) {
+                    this.value = this.value.slice(0, 5);
+                }
+            });
+
+            document.getElementById('email').addEventListener('input', function (e) {
+                const email = this.value;
+                const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                const isValidemail = emailPattern.test(email);
+        
+                if (isValidemail) {
+                    document.getElementById('email-message').textContent = 'E-mail válido';
+                    document.getElementById('email-message').style.color = 'green';
+                } else {
+                    document.getElementById('email-message').textContent = 'E-mail inválido';
+                    document.getElementById('email-message').style.color = 'red';
+                }
+            });
+            
+            document.getElementById('senha').addEventListener('input', checksenhas);
+            document.getElementById('senha-confirm').addEventListener('input', checksenhas);
+            function checksenhas() {
+                var senha = document.getElementById('senha').value;
+                var confirmsenha = document.getElementById('senha-confirm').value;
+                var message = document.getElementById('senha-message');
+            
+                if (!senha && !confirmsenha) {
+                    message.textContent = "";
+                    return;
+                }
+            
+                if (senha !== confirmsenha) {
+                    message.textContent = "As senhas não conferem!";
+                    message.style.color = 'red';
+                    message.style.fontSize = "13";
+                } else {
+                    message.textContent = "As senhas conferem!";
+                    message.style.color = 'green';
+                    message.style.fontSize = "13";
+                }
+            }
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+</html>

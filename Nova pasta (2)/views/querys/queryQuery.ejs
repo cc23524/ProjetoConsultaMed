@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Consulta</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    </head>
+
+    <body style="margin-top: 70px;">
+
+        <h1 style="text-align:center">Listagem de Consultas</h1>
+
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr style="text-align: center;">
+                    <th>ID</th>
+                    <th>DATA</th>
+                    <th>HORA</th>
+                    <th>MÉDICO</th>
+                    <th>PACIENTE</th>
+                    <th>TIPO DA CONSULTA</th>
+                    <th>STATUS DA CONSULTA</th>
+                    <th>      </th>
+                    <th>       </th>
+                </tr>
+            </thead>
+
+            <tbody style="text-align: center;">
+                <% if (Array.isArray(querys)) { %>
+                <% for (query of querys){ %>
+                    <tr>
+                        <td><%= query.idC %></td>
+                        <td><%= query.dataC %></td>
+                        <td><%= query.horaC %></td>
+                        <td><%= query.nomeMed %> <%= query.sobrenomeMed %> (<%= query.nomeTypeDoctor %>)</td>
+                        <td><%= query.nomePatient %> <%= query.sobrenomePatient %></td>
+                        <td><%= query.nomeTypeQ %></td>
+                        <td><%= query.nomeStatus %></td>
+                        <td>
+                            <form action="/editQ/<%= query.idC %>" method="post" style="display: inline-block;">
+                                <button type="submit">editar</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/removeQ/<%= query.idC %>" method="post" style="display: inline-block;">
+                                <button type="submit" onclick="return confirm('Tem certeza que deseja remover?')">remover</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% } %>
+                <% } else { %>
+                    <p>Erro: Não há consultas para exibir.</p>
+                <% } %>
+            </tbody>
+        </table>
+
+        <a href="/registerQ" class="btn btn-primary">Adicionar</a>
+        <a href="javascript:history.back();" class="btn btn-primary">Voltar</a>
+
+        <br><br><br><br>
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+    </body>
+</html>

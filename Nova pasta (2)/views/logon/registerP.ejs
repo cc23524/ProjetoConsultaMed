@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/register.css">
+    
+    <title>Registrar</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">Cadastro</h3>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form action="/addP" method="POST">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="nome">nome:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="nome" name="nome" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="sobrenome">Sobrenome:</label>
+                            <input type="text" class="form-control" id="sobrenome" name="sobrenome" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="email">E-mail:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <p id="email-message"></p>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="cpf">CPF:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="cpf" name="cpf" maxlength="11" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: -15px;">
+                        <label for="nickname">Nickname:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user-circle"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="nickname" name="nickname" required>
+                            <div id="nickname-message" class="error-message"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha">Senha:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input type="password" class="form-control" id="senha" name="senha" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha-confirm">Confirme a Senha:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input type="password" class="form-control" id="senha-confirm" name="senha-confirm" required>
+                        </div>
+                        <p id="senha-message"></p>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                    </div>
+                </form>
+                <div class="text-center mt-2" style="display: flex; justify-content:space-between">
+                    <a href="/">Already have an account? Sign in</a>
+                    <a href="javascript:history.back();" class="btn btn-primary">Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('senha').addEventListener('input', checksenhas);
+            document.getElementById('senha-confirm').addEventListener('input', checksenhas);
+            document.getElementById('nickname').addEventListener('input', checkNicknameExists);
+            document.getElementById('email').addEventListener('input', checkEmailExists);
+            document.getElementById('cpf').addEventListener('input', function (e) {
+                this.value = this.value.replace(/\D/g, '');
+                
+                if (this.value.length > 11) {
+                    this.value = this.value.slice(0, 11);
+                }
+            });
+            async function checkEmailExists() {
+                let email = document.getElementById('email').value;
+                const emailMessageElement = document.getElementById('email-message');
+            
+                if (!email) {
+                    emailMessageElement.textContent = '';
+                    emailMessageElement.style.color = 'initial';
+                    return;
+                }
+            
+                let response = await fetch(`/checkEmail?email=${email}`);
+                let data = await response.json();
+            
+                emailMessageElement.textContent = data.message;
+                emailMessageElement.style.color = data.message === "E-mail disponível!" ? 'green' : 'red';
+            }
+
+            async function checkNicknameExists() {
+                let nickname = document.getElementById('nickname').value;
+                const messageElement = document.getElementById('nickname-message');
+            
+                if (!nickname) {
+                    messageElement.textContent = '';
+                    messageElement.style.color = 'initial';
+                    return;
+                }
+            
+                let response = await fetch(`/checkNickname?nickname=${nickname}`);
+                let data = await response.json();
+            
+                messageElement.textContent = data.message;
+                messageElement.style.color = data.message === "Usuário disponível!" ? 'green' : 'red';
+            }
+            
+            function cpfFormat(e) {
+                var target = e.target;
+                var value = target.value.replace(/\D/g, '');
+            
+                if (value.length <= 3) {} else if (value.length <= 6) {
+                    value = value.replace(/^(\d{3})(\d{0,3})/, "$1.$2");
+                } else if (value.length <= 9) {
+                    value = value.replace(/^(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
+                } else {
+                    value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
+                }
+            
+                var newPosition = value.length;
+            
+                if (target.selectionEnd < newPosition) {
+                    if (newPosition === 4 || newPosition === 8 || newPosition === 12) newPosition--;
+                }
+            
+                target.value = value;
+                target.setSelectionRange(newPosition, newPosition);
+            }
+        
+            function checksenhas() {
+                var senha = document.getElementById('senha').value;
+                var confirmsenha = document.getElementById('senha-confirm').value;
+                var message = document.getElementById('senha-message');
+            
+                if (!senha && !confirmsenha) {
+                    message.textContent = "";
+                    return;
+                }
+            
+                if (senha !== confirmsenha) {
+                    message.textContent = "As senhas não conferem!";
+                    message.style.color = 'red';
+                    message.style.fontSize = "13";
+                } else {
+                    message.textContent = "As senhas conferem!";
+                    message.style.color = 'green';
+                    message.style.fontSize = "13";
+                }
+            }
+        });
+        
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/login.css">
+
+    <title>Login</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Login</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <form action="/login" method="POST">
+                    <div class="form-group">
+                        <label for="nickname">Usuário:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="nickname" name="nickname" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha">Senha:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input type="password" class="form-control" id="senha" name="senha" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                    </div>
+                </form>
+                <div class="text-center mt-2">
+                    <a href="/registerP">Create new account</a>
+                    <a href="/triste-viu">Forgot password?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+body {
+    background-color: #b6c2e9;
+    align-items: center;
+    margin-top: 120px;
+}
+
+.mt-2 {
+    display: flex;
+    justify-content: space-between;
+}

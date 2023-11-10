@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/register.css">
+    
+    <title>Registrar Consulta Médica</title>
+</head>
+
+<body style="margin-top: 60px;">
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">Cadastro de Consulta Médica</h3>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form action="/addQ" method="POST" onsubmit="return formatarHoraNoFormulario()">
+                    <div class="form-group mt-3">
+                        <label for="dadosConsulta">Data:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                            <input type="datetime-local" class="form-control" id="dadosConsulta" name="dadosConsulta" max="2024-12-31T23:59" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="idM">Médico:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-stethoscope"></i></span>
+                                </div>
+                                <select class="form-control" id="idM" name="idM" required>
+                                    <% med.forEach(function(med) { %>
+                                        <option value="<%= med.idM %>"<% if(med.idM === 0) { %> selected <% } %>>
+                                            <%= med.nomeMed %> <%= med.sobrenomeMed %> - (<%= med.nomeType %>)
+                                        </option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="idP">Paciente:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <select class="form-control" id="idP" name="idP" required>
+                                    <% querys.forEach(function(querys) { %>
+                                        <option value="<%= querys.idP %>">
+                                           <%= querys.nome %> <%= querys.sobrenome %>
+                                        </option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="idTypeQ">Tipo de Consulta:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-list"></i></span>
+                                </div>
+                                <select class="form-control" id="idTypeQ" name="idTypeQ" required>
+                                    <% typesQ.forEach(function(typesQ) { %>
+                                        <option value="<%= typesQ.idTypeQ %>"<% if (typesQ.idTypeQ === 0) { %> selected <% } %>>
+                                            <%= typesQ.idTypeQ %> - <%= typesQ.nome %>
+                                        </option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+            
+                        <div class="col-md-6 form-group">
+                            <label for="idStatusQ">Status da Consulta:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-spinner"></i></span>
+                                </div>
+                                <select class="form-control" id="idStatusQ" name="idStatusQ" readonly>
+                                    <% status.forEach(function(status) { %>
+                                        <option value="<%= status.idStatusQ %>"<% if (status.idStatusQ == 3) { %> selected <% } %>>
+                                            <%= status.nome %>
+                                        </option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary btn-block">Registrar Consulta</button>
+                    </div>
+                </form>
+                <div class="text-center mt-2" style="display: flex; justify-content: space-between">
+                    <a href="/query" class="btn btn-primary">Consultas</a>
+                    <a href="javascript:history.back();" class="btn btn-primary">Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+</html>
